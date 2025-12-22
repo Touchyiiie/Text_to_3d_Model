@@ -21,7 +21,7 @@ from pathlib import Path
 import numpy as np
 import trimesh
 
-from text3d.text_to_mesh import text_to_mesh
+from text3d import text_to_mesh
 
 
 # -------------------------------
@@ -201,14 +201,19 @@ def prompt_to_obj(prompt: str) -> Path:
     return out_path
 
 
-def main():
-    import sys
+if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print('Usage: text3d "..."')
-        return 1
+        print('Usage: python src/prompt_to_obj.py "\\"สวัสดี konnichiwa こんにちは\\" สีน้ำเงิน หนา 2"')
+        sys.exit(1)
+
     prompt = sys.argv[1]
     prompt_to_obj(prompt)
-    return 0
-if __name__ == "__main__":
-    raise SystemExit(main())
 
+def main():
+    if len(sys.argv) < 2:
+        print('Usage: text3d "\\"สวัสดี konnichiwa こんにちは\\" สีน้ำเงิน หนา 8"')
+        raise SystemExit(1)
+    prompt_to_obj(sys.argv[1])
+
+if __name__ == "__main__":
+    main()
