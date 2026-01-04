@@ -8,4 +8,10 @@ version = "0.1.0"
 dependencies = ["numpy", "pillow", "opencv-python", "shapely", "trimesh", "mapbox-earcut"]
 
 [project.scripts]
-text3d = "prompt_to_obj:main"
+text3d = "text3d.prompt_to_glb:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

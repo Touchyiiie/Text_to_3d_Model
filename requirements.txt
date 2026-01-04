@@ -3,3 +3,4 @@ pillow
 opencv-python 
 shapely 
 trimesh 
+mapbox-earcut

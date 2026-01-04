@@ -1,194 +1,113 @@
 ⚡⚡⚡ Description
-A lightweight, platform-independent system that converts any input text
-(Thai, English, Japanese, or any language supported by the selected font)
-into a clean 3D text model (.OBJ) using a bitmap-based pipeline.
+This project provides a lightweight and flexible system that converts any input text
+— Thai, English, Japanese, or any language supported by your font — into a fully-generated
+3D text model (.GLB).
 
-This project focuses on robust text-to-3D geometry generation without relying on
-platform-specific text engines or heavy dependencies, making it suitable for
-research, prototyping, and future AI-based extensions.
+The pipeline uses a bitmap-based approach to ensure high compatibility without relying on
+platform-specific text engines or heavy font parsing libraries.
 
-🔍 Overview
-
-The system transforms text into a 3D mesh through a deterministic pipeline:
-
-Text
- ↓
-Bitmap Rendering
- ↓
-Contour Detection
- ↓
-Polygon Reconstruction
- ↓
-3D Extrusion
- ↓
-Export (.OBJ)
+Users simply input a prompt, and the program outputs a clean, extruded 3D mesh that preserves
+the shape of the selected font. Ideal for 3D titles, logos, printable text objects, AR/VR assets,
+or integrating into AI systems that need text-to-3D capabilities.
 
 
-By converting text into a bitmap first, the pipeline avoids common issues with
-multi-language text rendering and ensures consistent results across platforms.
+⭐⭐⭐ Key Features
+● Convert any text into a 3D model (.GLB)  
+● Supports Thai / English / Japanese (font-based)  
+● Bitmap → Contour → Polygon (with holes) → 3D Extruded Mesh  
+● Automatic font scaling to ensure all characters fit (no cut-off)  
+● Height-normalized output (Y-axis fixed) for consistent sizing  
+● Works on any machine (no FreeType dependency)  
+● Ready for extension (prompt parser / AI pipeline)
 
-✨ Key Features
 
-✅ Convert any text into a 3D model (.OBJ)
+⚡⚡⚡คำอธิบาย (Description)
+โปรเจ็กต์นี้เป็นระบบแปลง “ข้อความ (Text)” ให้กลายเป็นโมเดลสามมิติ (.GLB) แบบอัตโนมัติ
+รองรับภาษาไทย/อังกฤษ/ญี่ปุ่น (และภาษาอื่น ๆ ถ้าฟอนต์รองรับ)
 
-🌏 Supports Thai, English, Japanese, and multilingual fonts
+ระบบใช้แนวคิด:
+Bitmap → Contour → Polygon (มีรู) → Extruded Mesh
+ทำให้รองรับหลายภาษาได้เสถียร ไม่ผูกกับแพลตฟอร์มหรือไลบรารีเฉพาะทาง
 
-🧱 Bitmap → Contour → Polygon → Extruded Mesh pipeline
 
-📐 Automatic font scaling (no missing or clipped characters)
+🧪 Input Format (สำคัญมาก)
+Rule:
+- Text inside quotes ("...") = ข้อความที่ต้องการทำเป็น 3D
+- Text outside quotes = options เช่น สี / ความหนา
 
-📏 Height-normalized 3D output for consistent sizing
+Example:
+text3d "\"สวัสดี konnichiwa こんにちは\" สีเหลือง หนา 8"
 
-💻 Works on any machine (no FreeType or OS-specific dependencies)
 
-🔗 Easy to integrate into AI pipelines, scripts, or 3D workflows
+------------------------------------------------------------
+⚡ (1) QUICK START — Clone → Run (copy/paste ชุดเดียว)
+------------------------------------------------------------
 
-🧠 Designed for gradual extension toward full Text-to-3D systems
+Windows PowerShell:
 
-🧪 Why Bitmap-Based?
-
-Traditional text-to-geometry pipelines rely on font vector parsing
-(e.g., FreeType), which can be platform-dependent and error-prone
-for multilingual text.
-
-This project uses a bitmap-first approach, which offers:
-
-Stable multi-language rendering
-
-Predictable geometry extraction
-
-Simpler debugging and visualization
-
-Easier integration with image-based AI models in the future
-
-🛠 Requirements
-
-Python 3.10.x (recommended)
-
-Libraries:
-
-numpy
-
-pillow
-
-opencv-python
-
-shapely
-
-trimesh
-
-🚀 How to Use
-STEP 1 — Create Virtual Environment
+git clone https://github.com/Touchyiiie/Text_to_3d_Model.git
+cd Text_to_3d_Model
 python -m venv .venv
 .\.venv\Scripts\activate
-python --version
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+
+# Run
+python src/prompt_to_obj.py "\"สวัสดี konnichiwa こんにちは\" สีเหลือง หนา 8"
 
 
-Make sure you are using Python 3.10.x
-
-STEP 2 — Install Dependencies
-pip install numpy pillow opencv-python shapely trimesh
+✅ Output:
+outputs/meshes/<name>.glb
 
 
-Verify installation:
+------------------------------------------------------------
+🧩 Optional: Run as a command (text3d)
+------------------------------------------------------------
+If your repo includes a console entry point, you can run:
 
-python -c "import numpy, PIL, cv2, shapely, trimesh; print('OK')"
-
-STEP 3 — Run the Program
-python src/prompt_to_obj.py "こんにちは"
-
-
-or
-
-python src/prompt_to_obj.py "สวัสดีโลก"
+text3d "\"สวัสดี konnichiwa こんにちは\" สีเหลือง หนา 8"
 
 
-The output .OBJ file will be saved to:
+------------------------------------------------------------
+🛠 Dependencies
+------------------------------------------------------------
+Always install `mapbox-earcut` (required for triangulation):
+pip install -r requirements.txt
 
-outputs/meshes/
 
-STEP 4 — Open in Blender
+------------------------------------------------------------
+🧠 Fonts (TH/EN/JP on EVERY machine)
+------------------------------------------------------------
+If you want Thai/English/Japanese to work reliably on ANY machine (even if the OS has no JP fonts),
+bundle open fonts in this folder:
 
-Open Blender
+assets/fonts/
 
-File → Import → Wavefront (.obj)
+Recommended (free / stable / best for mixed TH+EN+JP in one sentence):
+- NotoSansThai-Regular.ttf
+- NotoSansJP-Regular.otf (or .ttf)
+- NotoSansCJK-Regular.ttc (best “one font covers all”)
 
-Load the generated file
+⚠️ Note:
+- Avoid shipping proprietary fonts (e.g., Yu Gothic from Windows).
+- Noto fonts are great for distribution (OFL license).
 
-Adjust scale/material as needed
 
-📁 Project Structure
-PROJECT_TEXT3D
-│
-├─ src/
-│  ├─ text2mesh/
-│  │  └─ text_to_mesh.py
-│  └─ prompt_to_obj.py
-│
-├─ assets/
-│  └─ fonts/
-│
-├─ outputs/
-│  └─ meshes/
-│
-├─ debug_bitmap.png
-├─ debug_contours.png
-├─ requirements.txt
-├─ README.md
-└─ LICENSE
+------------------------------------------------------------
+🎨 Blender: “GLB has color but I can’t see it”
+------------------------------------------------------------
+If you open .glb and color doesn’t show, switch viewport shading:
+Viewport Shading → Material Preview (icon: sphere)
+(Solid mode may look gray even when material exists)
 
-🔮 Future Extensions (Planned)
 
-This project is intentionally scoped to text-only 3D generation, but designed
-to be extended into more advanced pipelines, such as:
-
-Text → Image → 3D
-
-AI-based font or style generation
-
-Web-based text-to-3D interfaces
-
-Integration with LLM-based prompt parsers
-
-Export to .GLB / .USD formats
-
-⚡ Thai Description (คำอธิบายภาษาไทย)
-
-โปรเจ็กต์นี้เป็นระบบที่สามารถแปลง ข้อความ (Text)
-ไม่ว่าจะเป็นภาษาไทย อังกฤษ ญี่ปุ่น หรือภาษาใด ๆ ที่ฟอนต์รองรับ
-ให้กลายเป็น โมเดลสามมิติ (.OBJ) ได้โดยอัตโนมัติ
-
-ระบบใช้แนวคิด
-Bitmap → Contour → Polygon → 3D Mesh
-เพื่อให้รองรับหลายภาษาได้อย่างเสถียร ไม่ผูกกับแพลตฟอร์มหรือไลบรารีเฉพาะทาง
-
-เหมาะสำหรับ:
-
-งานโลโก้ 3D
-
-ป้ายข้อความ
-
-โมเดลพิมพ์ 3D
-
-งาน AR / VR
-
-ระบบ AI ที่ต้องการความสามารถ text-to-3D
-
-📌 Scope (ขอบเขตโปรเจ็กต์)
-
-✔ โฟกัสเฉพาะ 3D Text Geometry
-✔ ไม่สร้างโมเดลคน / สัตว์ / สิ่งของในเวอร์ชันนี้
-✔ ออกแบบเพื่อการต่อยอดในอนาคตอย่างเป็นระบบ
-
+------------------------------------------------------------
 👋 Final Note
-
+------------------------------------------------------------
 This project is designed to be:
-
-Technically solid
-
-Bachelor-level appropriate
-
-Extendable without overengineering
+- Technically solid
+- Bachelor-level appropriate
+- Extendable without overengineering
 
 “Start simple. Build correctly. Extend intelligently.”
 
